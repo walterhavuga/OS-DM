@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Payment Form</title>
+  <style>
+    .form-container {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .form-group input[type="file"] {
+      padding: 0;
+    }
+
+    .form-group button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .form-group button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Payment Form</h2>
+    <form action="payment.php" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+        <label for="full-name">Full Name:</label>
+        <input type="text" id="full-name" name="full-name" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone Number:</label>
+        <input type="tel" id="phone" name="phone" required>
+      </div>
+
+      <div class="form-group">
+        <label for="city">City/Province:</label>
+        <select id="city" name="city" required>
+          <option value="">Select City/Province</option>
+          <option value="Kigali">Kigali</option>
+          <option value="Eastern">Eastern</option>
+          <option value="Northern">Northern</option>
+          <option value="Southern">Southern</option>
+          <option value="Western">Western</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="district">District:</label>
+        <select id="district" name="district" required>
+          <option value="">Select District</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="sector">Sector:</label>
+        <select id="sector" name="sector" required>
+          <option value="">Select Sector</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="cell">Cell:</label>
+        <input type="text" id="cell" name="cell" required>
+      </div>
+
+     <div class="form-group">
+    <label for="paid-amount">Paid Amount:</label>
+    <input type="number" id="paid-amount" name="paid_amount" step="0.01" required>
+</div>
+
+<div class="form-group">
+    <label for="proof">Proof of Payment:</label>
+    <input type="file" id="proof" name="proof_of_payment" accept="image/*" required>
+</div>
+
+
+      <div class="form-group">
+        <button type="submit">Submit</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+ // Define the options for districts and sectors based on the selected city/province
+var cityOptions = {
+  Kigali: ["Gasabo", "Kicukiro", "Nyarugenge"],
+  Eastern: [
+    "Bugesera",
+    "Gatsibo",
+    "Kayonza",
+    "Kirehe",
+    "Ngoma",
+    "Nyagatare",
+    "Rwamagana",
+  ],
+  Northern: ["Burera", "Gakenke", "Gicumbi", "Musanze", "Rulindo"],
+  Southern: [
+    "Gisagara",
+    "Huye",
+    "Kamonyi",
+    "Muhanga",
+    "Nyamagabe",
+    "Nyanza",
+    "Nyaruguru",
+    "Ruhango",
+  ],
+  Western: [
+    "Karongi",
+    "Ngororero",
+    "Nyabihu",
+    "Nyamasheke",
+    "Rubavu",
+    "Rusizi",
+    "Rutsiro",
+  ],
+};
+
+var districtSelect = document.getElementById("district");
+var sectorSelect = document.getElementById("sector");
+var citySelect = document.getElementById("city");
+
+// Populate the district dropdown based on the selected city/province
+citySelect.addEventListener("change", function () {
+  var selectedCity = citySelect.value;
+  var districts = cityOptions[selectedCity];
+
+  districtSelect.innerHTML = "<option value=''>Select District</option>"; // Clear the district dropdown
+  sectorSelect.innerHTML = "<option value=''>Select Sector</option>"; // Clear the sector dropdown
+
+  if (selectedCity !== "") {
+    districts.forEach(function (district) {
+      var option = document.createElement("option");
+      option.value = district;
+      option.text = district;
+      districtSelect.appendChild(option);
+    });
+  }
+});
+
+// Populate the sector dropdown based on the selected district
+districtSelect.addEventListener("change", function () {
+  var selectedDistrict = districtSelect.value;
+  var sectors = getSectorOptions(selectedDistrict);
+
+  sectorSelect.innerHTML = "<option value=''>Select Sector</option>"; // Clear the sector dropdown
+
+  if (selectedDistrict !== "") {
+    sectors.forEach(function (sector) {
+      var option = document.createElement("option");
+      option.value = sector;
+      option.text = sector;
+      sectorSelect.appendChild(option);
+    });
+  }
+});
+
+// Get the sector options based on the selected district
+function getSectorOptions(district) {
+  switch (district) {
+    case "Gasabo":
+      return [
+        "Bumbogo",
+        "Gatsata",
+        "Gikomero",
+        "Jali",
+        "Jabana",
+        "Kacyiru",
+        "Kagugu",
+        "Kanombe",
+        "Kimihurura",
+        "Kimironko",
+        "Kinunga",
+        "Masoro",
+        "Nduba",
+        "Ndera",
+        "Nyarutarama",
+        "Remera",
+        "Rusororo",
+        "Rutunga",
+      ];
+    case "Kicukiro":
+      return [
+        "Gahanga",
+        "Gatenga",
+        "Kagarama",
+        "Kanombe",
+        "Kicukiro",
+        "Kigarama",
+        "Masaka",
+        "Niboye",
+        "Nyarugunga",
+        "Remera",
+        "Rusororo",
+        "Tetero",
+      ];
+    case "Nyarugenge":
+      return [
+        "Gitega",
+        "Kanyinya",
+        "Kigali",
+        "Kimisagara",
+        "Mageragere",
+        "Muhima",
+        "Nyarugenge",
+        "Nyamirambo",
+        "Rwezamenyo",
+      ];
+    case "Bugesera":
+      return [
+        "Gashora",
+        "Juru",
+        "Kamabuye",
+        "Mareba",
+        "Mayange",
+        "Musenyi",
+        "Ntarama",
+        "Nyarugenge",
+        "Nzige",
+        "Rilima",
+        "Ruhuha",
+      ];
+    case "Gatsibo":
+      return [
+        "Gasange",
+        "Gitoki",
+        "Kabarore",
+        "Kageyo",
+        "Kiramuruzi",
+        "Kiziguro",
+        "Muhura",
+        "Murambi",
+        "Ngarama",
+        "Nyagihanga",
+        "Remera",
+        "Rugarama",
+      ];
+    case "Kayonza":
+      return [
+        "Gahini",
+        "Kabare",
+        "Mukarange",
+        "Murama",
+        "Murundi",
+        "Mwili",
+        "Ndego",
+        "Nyamirama",
+        "Rukara",
+        "Ruramira",
+      ];
+    case "Kirehe":
+      return [
+        "Gatore",
+        "Kigarama",
+        "Kirehe",
+        "Mahama",
+        "Mpanga",
+        "Musaza",
+        "Nasho",
+        "Nyamugari",
+        "Nyamugali",
+        "Nyankenke",
+        "Nyarubuye",
+        "Nyarubuye",
+        "Tabagwe",
+      ];
+    case "Ngoma":
+      return [
+        "Byimana",
+        "Karembo",
+        "Kazo",
+        "Kibungo",
+        "Kibungo",
+        "Mugesera",
+        "Mutenderi",
+        "Nyamata",
+        "Rukumberi",
+      ];
+    case "Nyagatare":
+      return [
+        "Gatunda",
+        "Karangazi",
+        "Katabagemu",
+        "Kiyombe",
+        "Matimba",
+        "Mimuri",
+        "Mukama",
+        "Musheli",
+        "Ndego",
+        "Nyagatare",
+        "Rukomo",
+        "Rutaraka",
+        "Rwempasha",
+        "Tabagwe",
+      ];
+    case "Rwamagana":
+      return [
+        "Gahengeri",
+        "Gishali",
+        "Kabare",
+        "Karenge",
+        "Karenge",
+        "Kigabiro",
+        "Muhazi",
+        "Munyaga",
+        "Murama",
+        "Murundi",
+        "Mwulire",
+        "Nyakaliro",
+        "Rukira",
+        "Rwamagana",
+      ];
+    case "Burera":
+      return [
+        "Bungwe",
+        "Butaro",
+        "Cyanika",
+        "Cyeru",
+        "Gatebe",
+        "Gahunga",
+        "Kivuye",
+        "Kubumba",
+        "Kyanamira",
+        "Nemba",
+        "Rugarama",
+        "Ruhunde",
+      ];
+    case "Gakenke":
+      return [
+        "Busengo",
+        "Coko",
+        "Cyabingo",
+        "Gakenke",
+        "Gashenyi",
+        "Gatonde",
+        "Kamubuga",
+        "Karambo",
+        "Kivuruga",
+        "Mugunga",
+        "Mugunga",
+        "Muhondo",
+        "Muyongwe",
+        "Nemba",
+      ];
+    case "Gicumbi":
+      return [
+        "Bwisige",
+        "Byumba",
+        "Cyumba",
+        "Giti",
+        "Kaniga",
+        "Kageyo",
+        "Kiyombe",
+        "Mataba",
+        "Miyove",
+        "Muko",
+        "Mutete",
+        "Rugarama",
+        "Rukomo",
+      ];
+    case "Musanze":
+      return [
+        "Burega",
+        "Busogo",
+        "Cyanika",
+        "Cyuve",
+        "Gahunga",
+        "Gataraga",
+        "Gitovu",
+        "Kinigi",
+        "Kimonyi",
+        "Muhoza",
+        "Muko",
+        "Musanze",
+        "Nkotsi",
+        "Nkumba",
+        "Nyange",
+      ];
+    case "Rulindo":
+      return [
+        "Base",
+        "Burega",
+        "Bushoki",
+        "Butaro",
+        "Cyinzuzi",
+        "Cyungo",
+        "Gataraga",
+        "Kigarama",
+        "Kinoni",
+        "Masoro",
+        "Mbogo",
+        "Murambi",
+        "Ntarabana",
+      ];
+    case "Gisagara":
+      return [
+        "Gikonko",
+        "Gishubi",
+        "Kansi",
+        "Kibilizi",
+        "Kigembe",
+        "Kigoma",
+        "Mamba",
+        "Muganza",
+        "Mugombwa",
+        "Mukindo",
+        "Musha",
+        "Nyanza",
+      ];
+    case "Huye":
+      return [
+        "Gishamvu",
+        "Karama",
+        "Kiyumba",
+        "Maraba",
+        "Mbazi",
+        "Muganza",
+        "Mugombwa",
+        "Mukura",
+        "Ngoma",
+        "Nyakagezi",
+        "Rwaniro",
+        "Tumba",
+      ];
+    case "Kamonyi":
+      return [
+        "Gacurabwenge",
+        "Gahogo",
+        "Karama",
+        "Kayenzi",
+        "Kigoma",
+        "Mugina",
+        "Musambira",
+        "Nemba",
+        "Rugobagoba",
+        "Rukoma",
+      ];
+    case "Muhanga":
+      return [
+        "Cyanika",
+        "Kabacuzi",
+        "Kibangu",
+        "Kibumbwe",
+        "Muhanga",
+        "Muhororo",
+        "Nyabinoni",
+        "Nyamabuye",
+        "Nyarusange",
+        "Rongi",
+      ];
+    case "Nyamagabe":
+      return [
+        "Buruhukiro",
+        "Cyanika",
+        "Gatare",
+        "Kaduha",
+        "Kibilizi",
+        "Kibumbwe",
+        "Kitabi",
+        "Mukura",
+        "Mukungu",
+        "Ngororero",
+        "Nyabimata",
+        "Ruheru",
+      ];
+    case "Nyanza":
+      return [
+        "Busasamana",
+        "Busoro",
+        "Kibogora",
+        "Kigoma",
+        "Mukingo",
+        "Muyira",
+        "Ntyazo",
+        "Nyaruguru",
+        "Ruhango",
+        "Rusatira",
+        "Rusebeya",
+        "Rwabicuma",
+        "Shyogwe",
+      ];
+    case "Nyaruguru":
+      return [
+        "Kibeho",
+        "Kibyue",
+        "Kitabi",
+        "Kivu",
+        "Mata",
+        "Mpanda",
+        "Mudasomwa",
+        "Munini",
+        "Nyabirasi",
+        "Nyaruguru",
+        "Ruramba",
+        "Sovu",
+      ];
+    case "Ruhango":
+      return [
+        "Bweramana",
+        "Bweramvura",
+        "Cyahinda",
+        "Kabagali",
+        "Kinihira",
+        "Kinazi",
+        "Mbuye",
+        "Mushishiro",
+        "Ntongwe",
+        "Ruhango",
+        "Shyogwe",
+      ];
+    case "Karongi":
+      return [
+        "Bwishyura",
+        "Gishyita",
+        "Gitesi",
+        "Kagano",
+        "Kamembe",
+        "Kanjo",
+        "Murambi",
+        "Murundi",
+        "Ndora",
+        "Nkanka",
+        "Nyakabuye",
+        "Rubengera",
+        "Rugabano",
+        "Rwankuba",
+      ];
+    case "Ngororero":
+      return [
+        "Gatumba",
+        "Hindiro",
+        "Kabaya",
+        "Kanama",
+        "Kigeyo",
+        "Muhanda",
+        "Muhororo",
+        "Mukamira",
+        "Muringa",
+        "Nyange",
+        "Nzaha",
+        "Ruli",
+      ];
+    case "Nyabihu":
+      return [
+        "Bigogwe",
+        "Jenda",
+        "Jomba",
+        "Kabatwa",
+        "Kanama",
+        "Karago",
+        "Kinoni",
+        "Mukamira",
+        "Muringa",
+        "Nyabihu",
+        "Rambura",
+        "Rugera",
+      ];
+    case "Nyamasheke":
+      return [
+        "Bushekeri",
+        "Bushenge",
+        "Bweyeye",
+        "Cyato",
+        "Gihombo",
+        "Kamembe",
+        "Karambi",
+        "Karengera",
+        "Kibirizi",
+        "Mahembe",
+        "Nkora",
+        "Nkombo",
+        "Nyabitekeri",
+        "Nzahaha",
+        "Ruharambuga",
+      ];
+    case "Rubavu":
+      return [
+        "Bugeshi",
+        "Bwira",
+        "Cyanzarwe",
+        "Gisenyi",
+        "Gisenyi",
+        "Kanama",
+        "Kanzenze",
+        "Kivumu",
+        "Nyakiliba",
+        "Nyamyumba",
+        "Nyundo",
+        "Rugera",
+        "Rubavu",
+      ];
+    case "Rusizi":
+      return [
+        "Bugarama",
+        "Bweyeye",
+        "Butare",
+        "Gihundwe",
+        "Gitambi",
+        "Giheke",
+        "Kamembe",
+        "Muganza",
+        "Mururu",
+        "Nkanka",
+        "Nkombo",
+        "Nkungu",
+      ];
+    case "Rutsiro":
+      return [
+        "Boneza",
+        "Bweramana",
+        "Gihango",
+        "Gikomero",
+        "Kabaya",
+        "Kigeyo",
+        "Kivumu",
+        "Manihira",
+        "Mugombwa",
+        "Murunda",
+        "Ruhango",
+        "Rusizi",
+      ];
+    default:
+      return [];
+  }
+}
+
+  </script>
+</body>
+</html>

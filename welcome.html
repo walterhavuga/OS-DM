@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Welcome</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<style type="text/css">
+  body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+h1 {
+  text-align: center;
+  margin-top: 0;
+}
+
+p {
+  text-align: center;
+}
+
+a {
+  display: block;
+  margin-top: 10px;
+  width: 100%;
+  background-color: #000000;
+  color: #ffffff;
+  padding: 10px;
+  text-decoration: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+a:hover {
+  background-color: #000000;
+  color: #ffffff;
+  transition: 0.5s;
+}
+
+</style>
+<body>
+  <div class="container">
+    <h1>Welcome to our shop!</h1>
+    <p>Please login or create an account to continue.</p>
+    <a href="login.html">Login</a>
+    <a href="shop.html">Visit our shop</a>
+  </div>
+  <script type="text/javascript">
+    // This function is called when the page loads.
+window.onload = function() {
+  // Get the login button.
+  var loginButton = document.getElementById("loginButton");
+
+  // When the login button is clicked, navigate to the login page.
+  loginButton.onclick = function() {
+    window.location.href = "login.html";
+  };
+
+  // Get the shop button.
+  var shopButton = document.getElementById("shopButton");
+
+  // When the shop button is clicked, navigate to the shop page.
+  shopButton.onclick = function() {
+    window.location.href = "shop.html";
+  };
+};
+
+  </script>
+</body>
+</html>

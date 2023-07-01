@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add to Cart</title>
+  <script>
+    // JavaScript code for add to cart functionality
+    function addToCart() {
+      var productName = document.getElementById('product-name').value;
+      var productQuantity = parseInt(document.getElementById('product-quantity').value);
+      var productPrice = parseFloat(document.getElementById('product-price').value);
+      
+      var total = productQuantity * productPrice;
+      
+      var cartItem = {
+        name: productName,
+        quantity: productQuantity,
+        price: productPrice,
+        total: total
+      };
+      
+      // Add the cart item to an array or perform any other desired actions
+      // Example: You can store the cart items in an array
+      var cartItems = [];
+      cartItems.push(cartItem);
+      
+      // Display the cart contents
+      var cartContents = '';
+      for (var i = 0; i < cartItems.length; i++) {
+        cartContents += 'Product Name: ' + cartItems[i].name + '<br>';
+        cartContents += 'Quantity: ' + cartItems[i].quantity + '<br>';
+        cartContents += 'Price: $' + cartItems[i].price.toFixed(2) + '<br>';
+        cartContents += 'Total: $' + cartItems[i].total.toFixed(2) + '<br>';
+        cartContents += '---------------------------<br>';
+      }
+      
+      document.getElementById('cart').innerHTML = cartContents;
+      
+      // Display the payment link
+      document.getElementById('payment-link').style.display = 'block';
+    }
+    
+    function goToPayment() {
+      window.location.href = 'payment.html'; // Redirect to payment.html
+    }
+  </script>
+</head>
+<body>
+  <h1>Add to Cart</h1>
+  <form>
+    <label for="product-name">Product Name:</label>
+    <input type="text" id="product-name"><br><br>
+    
+    <label for="product-quantity">Quantity:</label>
+    <input type="number" id="product-quantity"><br><br>
+    
+    <label for="product-price">Price:</label>
+    <input type="number" step="0.01" id="product-price"><br><br>
+    
+    <button type="button" onclick="addToCart()">Add to Cart</button>
+  </form>
+  
+  <h2>Cart Contents:</h2>
+  <div id="cart"></div>
+  
+  <div id="payment-link" style="display: none;">
+    <h2>Payment</h2>
+    <p>Proceed to payment by clicking the button below:</p>
+    <button type="button" onclick="goToPayment()">Payment</button>
+  </div>
+</body>
+</html>
+
+
